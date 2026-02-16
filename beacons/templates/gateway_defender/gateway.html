@@ -1,0 +1,177 @@
+<!-- <center>{% block title %} (null) so far {% endblock %}</center> -->
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="{% static 'css/gateway.css' %}" type="text/css">
+    <title>Protected Gateway</title>
+  <!-- <link rel="icon" href="{% static 'img/crimson-hexagram.ico' %}" type="image/x-icon"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  {% if text_obfuscation_enabled %}
+  <!-- Text obfuscation CSS -->
+  <style>
+    .gateway-protected-content,
+    .gateway-protected-content * {
+      -webkit-user-select: none; /* For Safari */
+      -moz-user-select: none;    /* For Firefox */
+      -ms-user-select: none;     /* For Internet Explorer/Edge */
+      user-select: none;         /* Standard syntax */
+    }
+  </style>
+  {% endif %}
+  
+  
+</head>
+<body>
+  <div id="spacer"></div>
+  {% if form.errors %}
+      <p style="color:black; text-align:left; padding:50px;">Your username or password was incorrect. Try again.</p>
+  {% endif %}
+
+  {% if next %}
+      {% if user.is_authenticated %}
+          <p style="color:crimson; text-align:left; padding:50px;">You dont have permission for this page</p>
+
+      {% else %}
+          <p style="color:black; text-align:left; padding:50px;" >Please login to see this page</p>
+      {% endif %}
+  {% endif %}
+  
+  <div class="gateway-protected-content">
+    <h3>Please enter some credentials to traverse down and explore my CV:</h3>
+
+    <form method="post" action="{% url 'index' %}">
+          {% csrf_token %}
+        
+          <h2>
+            {{ form.username.label_tag }}
+            {{ form.username }}
+          </h2>
+          
+          <h2>
+            
+            {{ form.password.label_tag }}
+            
+            <div class="password-wrapper">
+              {{ form.password|add_class:"password-input" }}
+              
+            </div> 
+            
+            <div class="eye-pass-break">
+             <button type="button" onclick="togglePassword()" class="toggle-password-btn" aria-label="Toggle Password">
+              <i id="toggle-icon" class="fa-solid fa-eye-slash"></i>
+            </button>
+            
+            <input type="submit" value="Login">
+          </div>
+          
+          </h2>
+        
+          <input type="hidden" name="next" value="{{ next }}">
+        </form>
+
+
+  </div>
+
+  
+  <style>
+    .password-wrapper {
+      position: relative;
+      display: inline-block;
+      width: 90%;
+      max-width: 229px;
+    }
+    
+    .password-input {
+      width: 100%;
+      font-size: 1.2rem;
+      padding: 12px; /* room for icon on right */
+      box-sizing: border-box;
+      color: black;
+      background-color: white;
+      border: 1px solid black;
+    }
+    
+    .toggle-password-btn {
+      /*position: absolute;
+      top: 50%;
+      right: 60%;
+      transform: translateY(-50%);*/
+      background: none;
+      border: none;
+      padding-left: 100px;
+      margin: 10px auto;      
+      cursor: pointer;
+      color: black;
+      /* height: 100%;*/
+      /*display: flex;*/
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .toggle-password-btn i {
+      font-size: 1.5rem;
+      color: black;
+      pointer-events: none;
+    }
+    
+    .toggle-password-btn:hover i {
+      color: green;
+    }
+
+  input {
+    padding: 15px;
+    padding-right: 35px;
+    border: 1px solid black;
+  }
+
+  ::selection {
+  background-color: grey;
+  }
+
+  label {
+      color: black;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 5%;
+  }
+
+ body {
+    background: white;
+    color: black;
+    text-align: left;  
+  }
+
+  h3 {
+    padding-top: 50px;
+    padding-left:50px;
+  }
+  
+  
+  /*
+  h2 {
+    width: 50%;
+  }
+  */
+
+  /*
+  .eye-pass-break {
+    margin:200px;
+  }
+  */
+  </style>
+
+  {% if text_obfuscation_enabled %}
+  <!-- Text obfuscation JavaScript -->
+  <script src="{% static 'js/text_obfuscation.js' %}"></script>
+  {% endif %}
+
+</body>
+
+
+</html>
